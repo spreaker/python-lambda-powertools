@@ -1,44 +1,20 @@
 import os
-import json
-import math
 import random
 import datetime
 import traceback
-
-LEVELS = {
-    "DEBUG": 20,
-    "INFO": 30,
-    "WARN": 40,
-    "ERROR": 50,
-}
-
-
-class Config:
-    LOG_THROTTLE = {
-        "INFO": 0.1,  # 10%
-        "WARN": 0.2  # 20%
-    }
-
-    @classmethod
-    def is_log_throttle_enabled(cls):
-        return cls.parse_bool(os.environ.get("LOG_THROTTLE_ENABLED"), False)
-
-    @classmethod
-    def get_log_throttle(cls, level_name):
-        return cls.LOG_THROTTLE.get(level_name)
-
-    @classmethod
-    def parse_bool(cls, value, default_value):
-        if type(value) is bool:
-            return value
-        if type(value) is str:
-            value = value.lower()
-            return value == "1" or value == "true"
-        return default_value
+from config import Config
+from utils import serialize_log
 
 
 class Logger:
+
     def __init__(self):
+        self.LEVELS = {
+            "DEBUG": 20,
+            "INFO": 30,
+            "WARN": 40,
+            "ERROR": 50,
+        }
         self._level = None
         self._context = None
         self.reset()
@@ -49,11 +25,11 @@ class Logger:
         return cls.instance
 
     def reset(self):
-        self._level = LEVELS[os.environ.get("LOG_LEVEL", "INFO")]
+        self._level = self.LEVELS[os.environ.get("LOG_LEVEL", "INFO")]
         self._context = {}
 
     def set_level(self, level_name):
-        self._level = LEVELS.get(level_name, self._level)
+        self._level = self.LEVELS.get(level_name, self._level)
 
     def capture(self, env=None, event=None, context=None):
         function_name = None
@@ -98,12 +74,12 @@ class Logger:
 
     def should_throttle(self, level_name):
         # If the throttle is disabled or the logger is configured in debug level we don't throttle anything
-        if not Config.is_log_throttle_enabled() or self._level == LEVELS["DEBUG"]:
+        if not Config.is_log_throttle_enabled() or self._level == self.LEVELS["DEBUG"]:
             return False
         return random.random() > (Config.get_log_throttle(level_name) or 1)
 
     def log(self, level_name, message, context=None, error=None):
-        if LEVELS[level_name] < self._level or self.should_throttle(level_name):
+        if self.LEVELS[level_name] < self._level or self.should_throttle(level_name):
             return
 
         if context is None:
@@ -116,7 +92,7 @@ class Logger:
             context["error_message"] = str(error)
             context["error_stack"] = "\n".join(traceback.format_exc().splitlines())
 
-        log_str = self.serialize_log(
+        log_str = serialize_log(
             {
                 **self._context,
                 **(context or {}),
@@ -139,20 +115,3 @@ class Logger:
 
     def error(self, message, context=None, error=None):
         self.log("ERROR", message, context, error)
-
-    def serialize_log(self, log):
-        response = log.copy()
-
-        for key, value in response.items():
-            if value is None:
-                response[key] = None
-            elif isinstance(value, (str, bool)):
-                response[key] = value
-            elif isinstance(value, (list, dict)):
-                response[key] = json.dumps(value)
-            elif math.isnan(value) or (isinstance(value, (int, float)) and not math.isfinite(value)):
-                response[key] = None
-            elif isinstance(value, (int, float)):
-                response[key] = value
-
-        return json.dumps(response)
