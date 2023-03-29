@@ -4,7 +4,8 @@ import builtins
 import datetime
 import json
 from unittest import mock
-from logger import Logger, Config
+from logger import Logger
+from config import Config
 
 MOCK_DATE_MS = 1679313252.708
 
