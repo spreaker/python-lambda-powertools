@@ -1,5 +1,5 @@
 import os
-from utils import parse_bool
+from lambda_powertools.utils import parse_bool
 
 
 class Config:

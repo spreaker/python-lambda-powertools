@@ -2,8 +2,8 @@ import os
 import random
 import datetime
 import traceback
-from config import Config
-from utils import serialize_log
+from lambda_powertools.config import Config
+from lambda_powertools.utils import serialize_log
 
 
 class Logger:

@@ -4,8 +4,8 @@ import builtins
 import datetime
 import json
 from unittest import mock
-from logger import Logger
-from config import Config
+from lambda_powertools.logger import Logger
+from lambda_powertools.config import Config
 
 MOCK_DATE_MS = 1679313252.708
 
