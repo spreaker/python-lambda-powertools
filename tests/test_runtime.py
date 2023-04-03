@@ -38,9 +38,8 @@ def test_power_handler_initialize_the_logger_to_properly_capture_context(mocker)
             "requestContext": {"apiId": "_", "requestId": "apiGwRequestId"},
             "headers": {"x-amz-cf-id": "cfRequestId"}
         },
-        {
-            "awsRequestId": "awsRequestId"
-        }
+        # context is a LambdaContext object, not a dict
+        context=type('', (object,), {"aws_request_id": "awsRequestId"})()
     )
 
     assert response == {"foo": "bar"}

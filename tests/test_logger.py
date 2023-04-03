@@ -122,9 +122,8 @@ def test_capture_should_capture_information_and_add_them(info_logger, mocker):
             "requestContext": {"apiId": "_", "requestId": "apiGwRequestId"},
             "headers": {"x-amz-cf-id": "cfRequestId"}
         },
-        context={
-            "awsRequestId": "awsRequestId"
-        }
+        # context is a LambdaContext object, not a dict
+        context=type('', (object,), {"aws_request_id": "awsRequestId"})()
     )
     info_logger.info("boo")
 
