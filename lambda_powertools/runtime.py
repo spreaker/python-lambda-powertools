@@ -1,7 +1,5 @@
 import os
-from lambda_powertools.logger import Logger
-
-logger = Logger()
+from lambda_powertools.logger import logger
 
 
 def power_handler(wrapped_handler):
