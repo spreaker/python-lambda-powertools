@@ -115,3 +115,6 @@ class Logger:
 
     def error(self, message, context=None, error=None):
         self.log("ERROR", message, context, error)
+
+
+logger = Logger()

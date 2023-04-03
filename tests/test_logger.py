@@ -4,7 +4,7 @@ import builtins
 import datetime
 import json
 from unittest import mock
-from lambda_powertools.logger import Logger
+from lambda_powertools.logger import logger
 from lambda_powertools.config import Config
 
 MOCK_DATE_MS = 1679313252.708
@@ -34,7 +34,6 @@ def patch_datetime_now(monkeypatch):
 
 @pytest.fixture(scope='function')
 def debug_logger():
-    logger = Logger()
     logger.reset()
     logger.set_level("DEBUG")
     return logger
@@ -42,7 +41,6 @@ def debug_logger():
 
 @pytest.fixture(scope='function')
 def info_logger():
-    logger = Logger()
     logger.reset()
     logger.set_level("INFO")
     return logger
@@ -50,7 +48,6 @@ def info_logger():
 
 @pytest.fixture(scope='function')
 def warn_logger():
-    logger = Logger()
     logger.reset()
     logger.set_level("WARN")
     return logger
@@ -58,7 +55,6 @@ def warn_logger():
 
 @pytest.fixture(scope='function')
 def error_logger():
-    logger = Logger()
     logger.reset()
     logger.set_level("ERROR")
     return logger
