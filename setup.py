@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 setup(
     name='lambda_powertools',
     packages=find_packages(include=['lambda_powertools']),
-    version='0.1.2',
+    version='0.1.3',
     description='Lambda Powertools is a package encapsulating utilities and best practices used to write Python Lambda functions at Spreaker.',
     author='Spreaker',
     license='MIT',

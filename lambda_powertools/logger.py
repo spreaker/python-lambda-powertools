@@ -47,7 +47,7 @@ class Logger:
                 function_version = None
 
         if context is not None:
-            aws_request_id = context.get("awsRequestId", None)
+            aws_request_id = context.aws_request_id
 
         if event is not None:
             if event.get("requestContext") and event.get("requestContext").get("apiId"):
