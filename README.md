@@ -2,15 +2,11 @@
 
 Lambda Powertools is a package encapsulating utilities and best practices used to write Python Lambda functions at Spreaker.
 
-## Local development
-
-TODO
-
 ## Components
 
 ### PowerHandler
 
-PowerHandler wraps a traditional Lambda handler and makes it smarter.
+PowerHandler wraps a traditional Lambda handler and makes it smarter automatically setting up the logger with capturing of environment variables.
 
 Example:
 
