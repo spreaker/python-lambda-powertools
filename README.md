@@ -28,7 +28,7 @@ def lambda_handler(event, context):
 
 This logger provides an out-of-the-box logging experience compliant to Spreaker best practices:
 
-- It use structured logging adhering to the Spreaker logging policies
+- It uses structured logging adhering to the Spreaker logging policies
 - When used in conjunction with the PowerHandler it's automatically initialized to capture useful information from the execution environment, like the function version and memory, and the various ids injected by AWS based on the execution context
 - It automatically enables debug logging for the incoming requests when specified
 - Embedded throttling policy
@@ -49,7 +49,7 @@ The logger supports throttling that works like this:
     + Logger will log `20%` of `WARN`
     + Logger will log `100%` of `ERROR`
 
-The throttling, disabled by default, can be enabled setting to true (`True`, `true`, `1` are all valid values) the environment variable `LOG_THROTTLE_ENABLED`.
+The throttling, disabled by default, can be enabled by setting environment variable `LOG_THROTTLE_ENABLED` to true (`True`, `true`, `1` are all valid values).
 
 #### Example
 

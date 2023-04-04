@@ -23,7 +23,7 @@ def serialize_log(log):
             response[key] = json.dumps(value)
         elif math.isnan(value) or (isinstance(value, (int, float)) and not math.isfinite(value)):
             response[key] = None
-        elif isinstance(value, (int, float)):
+        else:
             response[key] = value
 
     return json.dumps(response)
