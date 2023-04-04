@@ -2,6 +2,19 @@
 
 Lambda Powertools is a package encapsulating utilities and best practices used to write Python Lambda functions at Spreaker.
 
+## Local development
+To develop locally the library spin on the necessary container:
+
+```
+docker compose up --build
+```
+
+Enter the dev container and run the tests with `pytest`:
+
+```
+docker compose exec dev sh
+```
+
 ## Components
 
 ### PowerHandler
