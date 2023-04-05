@@ -4,9 +4,9 @@ RUN  mkdir -p /workspace/python-lambda-powertools
 
 WORKDIR /workspace/python-lambda-powertools
 
-COPY requirements-tests.txt ./
-RUN pip --no-cache-dir install -r ./requirements-tests.txt
+ADD lambda_powertools ./lambda_powertools
+ADD tests ./tests
 
-COPY lambda_powertools lambda_powertools
-RUN mkdir -p tests
-COPY tests/*.py tests/
+ADD setup.py ./
+
+RUN python setup.py build
