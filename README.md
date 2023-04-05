@@ -12,7 +12,7 @@ docker compose up --build
 
 ## Releasing
 
-To install the package locally, for inter-project usage, run:
+To install the package locally, for inter-project usage, set the proper version in the file path and run:
 
 ```bash
 python setup.py bdist_wheel
