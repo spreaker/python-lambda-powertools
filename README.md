@@ -4,18 +4,10 @@ Lambda Powertools is a package encapsulating utilities and best practices used t
 
 ## Local development
 
-To develop locally the library spin on the necessary container and run it:
+To develop locally the library build the necessary container with, pytest will run automatically:
 
 ```bash
 docker compose up --build
-
-docker compose exec dev sh
-```
-
-Then you can run the tests with:
-
-```bash
-python setup.py pytest
 ```
 
 ## Releasing
