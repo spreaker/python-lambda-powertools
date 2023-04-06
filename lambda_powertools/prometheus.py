@@ -6,11 +6,6 @@ def reset():
     for collector in collectors:
         client.REGISTRY.unregister(collector)
 
-    # from prometheus_client import gc_collector, platform_collector, process_collector
-    # process_collector.ProcessCollector()
-    # platform_collector.PlatformCollector()
-    # gc_collector.GCCollector()
-
 
 def filter_metrics(m):
     # Other metric types are not supported so far
