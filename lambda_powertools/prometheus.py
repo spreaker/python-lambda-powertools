@@ -17,7 +17,7 @@ def filter_metrics(m):
         return False
 
     # Empty metrics without labels are exported with zero value and empty labels ¯\_(ツ)_/¯
-    if len(m.samples) == 1 and m.samples[0].value == 0 and len(m.samples[0].labels.keys()) == 0:
+    if len(m.samples) == 1 and m.samples[0].value == 0.0 and len(m.samples[0].labels.keys()) == 0:
         return False
 
     return True
@@ -25,7 +25,14 @@ def filter_metrics(m):
 
 def get_metrics():
     data = client.REGISTRY.collect()
-    return list(filter(filter_metrics, data))
+
+    # Remove _created metrics (hack because PROMETHEUS_DISABLE_CREATED_SERIES is not working)
+    for metric in data:
+        metric.samples = [sample for sample in metric.samples if not sample.name.endswith("_created")]
+
+    metrics = list(filter(filter_metrics, data))
+
+    return metrics
 
 
 def flush_metrics():

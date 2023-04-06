@@ -14,7 +14,16 @@ gauge = None
 
 
 @pytest.fixture(autouse=True)
+@mock.patch.dict(os.environ, {"PROMETHEUS_DISABLE_CREATED_SERIES": "True"})
 def before_each(monkeypatch):
+    # Trying to disable default collector metrics, not under test
+    try:
+        client.REGISTRY.unregister(client.GC_COLLECTOR)
+        client.REGISTRY.unregister(client.PLATFORM_COLLECTOR)
+        client.REGISTRY.unregister(client.PROCESS_COLLECTOR)
+    except:
+        pass
+
     global counter_no_labels, counter_with_labels, histogram_no_labels, histogram_with_labels, gauge
 
     counter_no_labels = Counter(
@@ -55,16 +64,7 @@ def test_prometheus_get_metrics_does_not_return_empty_metrics():
     assert metrics == []
 
 
-@mock.patch.dict(os.environ, {"PROMETHEUS_DISABLE_CREATED_SERIES": "True"})
 def test_prometheus_get_metrics_returns_non_empty_metrics():
-    # Trying to disable default collector metrics, not under test
-    try:
-        client.REGISTRY.unregister(client.GC_COLLECTOR)
-        client.REGISTRY.unregister(client.PLATFORM_COLLECTOR)
-        client.REGISTRY.unregister(client.PROCESS_COLLECTOR)
-    except:
-        pass
-
     counter_no_labels.inc(1)
     counter_with_labels.labels("bar").inc(2)
     histogram_no_labels.observe(1)
@@ -72,10 +72,6 @@ def test_prometheus_get_metrics_returns_non_empty_metrics():
     gauge.set(1)  # Gauge is not supported yet
 
     metrics = get_metrics()
-
-    # Remove _created metrics (hack because PROMETHEUS_DISABLE_CREATED_SERIES is not working)
-    for metric in metrics:
-        metric.samples = [sample for sample in metric.samples if not sample.name.endswith("_created")]
 
     expected = [
         Metric("prometheus_spec_counter_no_labels", "Prometheus example counter without labels", "counter", ""),
