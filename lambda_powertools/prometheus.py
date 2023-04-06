@@ -1,4 +1,6 @@
+import json
 import prometheus_client as client
+from lambda_powertools.metric_encoder import MetricEncoder
 
 
 def reset():
@@ -41,4 +43,6 @@ def flush_metrics():
     if not metrics or len(metrics) == 0:
         return
 
-    print(f'PROMLOG {metrics}')
+    json_metrics = json.dumps(metrics, cls=MetricEncoder)
+
+    print(f'PROMLOG {json_metrics}')

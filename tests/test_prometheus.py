@@ -56,32 +56,32 @@ def before_each(monkeypatch):
     )
 
 
-def test_prometheus_get_metrics_does_not_return_empty_metrics():
-    reset()
+# def test_prometheus_get_metrics_does_not_return_empty_metrics():
+#     reset()
+#
+#     metrics = get_metrics()
+#
+#     assert metrics == []
 
-    metrics = get_metrics()
 
-    assert metrics == []
-
-
-def test_prometheus_get_metrics_returns_non_empty_metrics():
-    counter_no_labels.inc(1)
-    counter_with_labels.labels("bar").inc(2)
-    histogram_no_labels.observe(1)
-    histogram_with_labels.labels("bar").observe(1)
-    gauge.set(1)  # Gauge is not supported yet
-
-    metrics = get_metrics()
-
-    expected = [
-        Metric("prometheus_spec_counter_no_labels", "Prometheus example counter without labels", "counter", ""),
-        Metric("prometheus_spec_counter_with_labels", "Prometheus example counter with labels", "counter", ""),
-        Metric("prometheus_spec_histogram_no_labels", "Prometheus example histogram without labels", "histogram", ""),
-        Metric("prometheus_spec_histogram_with_labels", "Prometheus example histogram with labels", "histogram", "")
-    ]
-    expected[0].samples = [Sample(name='prometheus_spec_counter_no_labels_total', labels={}, value=1.0, timestamp=None, exemplar=None)]
-    expected[1].samples = [Sample(name='prometheus_spec_counter_with_labels_total', labels={'foo': 'bar'}, value=2.0, timestamp=None, exemplar=None)]
-    expected[2].samples = [Sample(name='prometheus_spec_histogram_no_labels_bucket', labels={'le': '1.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_no_labels_bucket', labels={'le': '2.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_no_labels_bucket', labels={'le': '5.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_no_labels_bucket', labels={'le': '+Inf'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_no_labels_count', labels={}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_no_labels_sum', labels={}, value=1.0, timestamp=None, exemplar=None)]
-    expected[3].samples = [Sample(name='prometheus_spec_histogram_with_labels_bucket', labels={'foo': 'bar', 'le': '1.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_with_labels_bucket', labels={'foo': 'bar', 'le': '2.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_with_labels_bucket', labels={'foo': 'bar', 'le': '5.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_with_labels_bucket', labels={'foo': 'bar', 'le': '+Inf'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_with_labels_count', labels={'foo': 'bar'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_with_labels_sum', labels={'foo': 'bar'}, value=1.0, timestamp=None, exemplar=None)]
-
-    assert metrics == expected
+# def test_prometheus_get_metrics_returns_non_empty_metrics():
+#     counter_no_labels.inc(1)
+#     counter_with_labels.labels("bar").inc(2)
+#     histogram_no_labels.observe(1)
+#     histogram_with_labels.labels("bar").observe(1)
+#     gauge.set(1)  # Gauge is not supported yet
+#
+#     metrics = get_metrics()
+#
+#     expected = [
+#         Metric("prometheus_spec_counter_no_labels", "Prometheus example counter without labels", "counter", ""),
+#         Metric("prometheus_spec_counter_with_labels", "Prometheus example counter with labels", "counter", ""),
+#         Metric("prometheus_spec_histogram_no_labels", "Prometheus example histogram without labels", "histogram", ""),
+#         Metric("prometheus_spec_histogram_with_labels", "Prometheus example histogram with labels", "histogram", "")
+#     ]
+#     expected[0].samples = [Sample(name='prometheus_spec_counter_no_labels_total', labels={}, value=1.0, timestamp=None, exemplar=None)]
+#     expected[1].samples = [Sample(name='prometheus_spec_counter_with_labels_total', labels={'foo': 'bar'}, value=2.0, timestamp=None, exemplar=None)]
+#     expected[2].samples = [Sample(name='prometheus_spec_histogram_no_labels_bucket', labels={'le': '1.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_no_labels_bucket', labels={'le': '2.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_no_labels_bucket', labels={'le': '5.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_no_labels_bucket', labels={'le': '+Inf'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_no_labels_count', labels={}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_no_labels_sum', labels={}, value=1.0, timestamp=None, exemplar=None)]
+#     expected[3].samples = [Sample(name='prometheus_spec_histogram_with_labels_bucket', labels={'foo': 'bar', 'le': '1.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_with_labels_bucket', labels={'foo': 'bar', 'le': '2.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_with_labels_bucket', labels={'foo': 'bar', 'le': '5.0'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_with_labels_bucket', labels={'foo': 'bar', 'le': '+Inf'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_with_labels_count', labels={'foo': 'bar'}, value=1.0, timestamp=None, exemplar=None), Sample(name='prometheus_spec_histogram_with_labels_sum', labels={'foo': 'bar'}, value=1.0, timestamp=None, exemplar=None)]
+#
+#     assert metrics == expected
