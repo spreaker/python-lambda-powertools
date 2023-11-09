@@ -1,5 +1,10 @@
 import os
 import json
+import sys
+
+modulename = 'prometheus_client'
+if modulename in sys.modules:
+    raise Exception("prometheus_client already imported, lambda_powertools.prometheus must be imported before")
 
 os.environ['PROMETHEUS_DISABLE_CREATED_SERIES'] = 'True'
 import prometheus_client
