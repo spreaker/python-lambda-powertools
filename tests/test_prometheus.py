@@ -1,5 +1,8 @@
+import os
 import pytest
-from lambda_powertools.prometheus import get_metrics, reset
+from unittest.mock import patch
+
+from lambda_powertools.prometheus import get_metrics, reset, flush_metrics
 from prometheus_client import Counter, Histogram, Gauge
 
 counter_no_labels = Counter(
@@ -43,6 +46,13 @@ def before_each(monkeypatch):
 
 
 def test_prometheus_get_metrics_does_not_return_empty_metrics():
+    gauge.set(1)  # Gauge is not supported yet
+    counter_no_labels.inc(1)
+    counter_with_labels.labels("bar").inc(2)
+    histogram_no_labels.observe(2)
+    histogram_no_labels.observe(5)
+    histogram_with_labels.labels("bar").observe(2)
+
     reset()
 
     metrics = get_metrics()
@@ -85,3 +95,14 @@ prometheus_spec_histogram_with_labels_sum{foo="bar"} 2.0
 """
 
     assert metrics == expected
+
+
+@patch('builtins.print')
+@patch.dict(os.environ, {"PYTEST_CURRENT_TEST": ""})
+def test_prometheus_flush_metrics(mock_print):
+    counter_no_labels.inc(1)
+    counter_with_labels.labels("bar").inc(2)
+
+    flush_metrics()
+
+    mock_print.assert_called_with('PROMLOG ["# HELP prometheus_spec_counter_no_labels_total Prometheus example counter without labels\\n# TYPE prometheus_spec_counter_no_labels_total counter\\nprometheus_spec_counter_no_labels_total 1.0\\n# HELP prometheus_spec_counter_with_labels_total Prometheus example counter with labels\\n# TYPE prometheus_spec_counter_with_labels_total counter\\nprometheus_spec_counter_with_labels_total{foo=\\"bar\\"} 2.0\\n"]')

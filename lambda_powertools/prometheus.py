@@ -46,9 +46,12 @@ def filter_metrics(m):
     dir_m = dir(m)
     if "_value" in dir_m and m._value._value == 0:
         return False
-    if "_metrics" in dir_m and len(m._metrics.values()) == 0:
-        return False
     if "_buckets" in dir_m and m._sum._value == 0:
+        return False
+    if "_metrics" in dir_m:
+        for metric in m._metrics.values():
+            if ("_value" in dir(metric) and metric._value._value > 0) or ("_sum" in dir(metric) and metric._sum._value > 0):
+                return True
         return False
 
     return True
