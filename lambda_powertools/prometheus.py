@@ -51,13 +51,11 @@ def filter_metrics(m):
 
 def get_metrics():
     new_registry = CollectorRegistry(auto_describe=True)
-    for collector in list(prometheus_client.REGISTRY._collector_to_names.keys()):
-        if (filter_metrics(collector)):
-            new_registry.register(collector)
 
-    data = prometheus_client.generate_latest(new_registry).decode("utf-8")
+    for collector in list(filter(filter_metrics, prometheus_client.REGISTRY._collector_to_names.keys())):
+        new_registry.register(collector)
 
-    return data
+    return prometheus_client.generate_latest(new_registry).decode("utf-8")
 
 
 def flush_metrics():
