@@ -69,4 +69,7 @@ def flush_metrics():
     if not metrics or len(metrics) == 0:
         return
 
+    if os.environ.get("PYTEST_CURRENT_TEST"):
+        return
+
     print("PROMLOG [" + json.dumps(metrics) + "]")
