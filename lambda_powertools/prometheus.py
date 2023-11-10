@@ -1,14 +1,9 @@
 import os
 import json
-import sys
-
-if "prometheus_client" in sys.modules:
-    raise Exception("prometheus_client already imported, lambda_powertools.prometheus must be imported before")
-
-os.environ["PROMETHEUS_DISABLE_CREATED_SERIES"] = "True"
 import prometheus_client
 from prometheus_client import CollectorRegistry
 
+prometheus_client.disable_created_metrics()
 prometheus_client.REGISTRY.unregister(prometheus_client.GC_COLLECTOR)
 prometheus_client.REGISTRY.unregister(prometheus_client.PLATFORM_COLLECTOR)
 prometheus_client.REGISTRY.unregister(prometheus_client.PROCESS_COLLECTOR)
