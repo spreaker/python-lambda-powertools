@@ -4,4 +4,4 @@ services:
   test:
     build:
       context: .
-    command: python setup.py pytest
+    command: python setup.py pytest --junitxml=/tmp
