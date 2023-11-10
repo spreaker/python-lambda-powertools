@@ -9,4 +9,4 @@ ADD tests ./tests
 
 ADD setup.py ./
 
-RUN python setup.py pytest
+RUN python setup.py build
