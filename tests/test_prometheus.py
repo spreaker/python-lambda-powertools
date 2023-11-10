@@ -73,6 +73,9 @@ def test_prometheus_get_metrics_returns_non_empty_metrics():
     expected = """# HELP prometheus_spec_counter_no_labels_total Prometheus example counter without labels
 # TYPE prometheus_spec_counter_no_labels_total counter
 prometheus_spec_counter_no_labels_total 1.0
+# HELP prometheus_spec_counter_with_labels_total Prometheus example counter with labels
+# TYPE prometheus_spec_counter_with_labels_total counter
+prometheus_spec_counter_with_labels_total{foo="bar"} 2.0
 # HELP prometheus_spec_histogram_no_labels Prometheus example histogram without labels
 # TYPE prometheus_spec_histogram_no_labels histogram
 prometheus_spec_histogram_no_labels_bucket{le="1.0"} 0.0
