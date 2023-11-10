@@ -2,11 +2,10 @@ import os
 import json
 import sys
 
-modulename = 'prometheus_client'
-if modulename in sys.modules:
+if "prometheus_client" in sys.modules:
     raise Exception("prometheus_client already imported, lambda_powertools.prometheus must be imported before")
 
-os.environ['PROMETHEUS_DISABLE_CREATED_SERIES'] = 'True'
+os.environ["PROMETHEUS_DISABLE_CREATED_SERIES"] = "True"
 import prometheus_client
 from prometheus_client import CollectorRegistry
 
@@ -16,7 +15,7 @@ prometheus_client.REGISTRY.unregister(prometheus_client.PROCESS_COLLECTOR)
 
 
 def reset():
-    for collector in list(prometheus_client.REGISTRY._collector_to_names.keys()):
+    for collector in prometheus_client.REGISTRY._collector_to_names:
         if "_value" in dir(collector):
             # case Counter without labels
             collector._value.set(0)
@@ -39,7 +38,7 @@ def reset():
 
 def filter_metrics(m):
     # Other metric types are not supported so far
-    if not m._type == "counter" and not m._type == "histogram":
+    if m._type not in ("counter", "histogram"):
         return False
 
     # Empty metrics with labels are exported without values
@@ -60,7 +59,7 @@ def filter_metrics(m):
 def get_metrics():
     new_registry = CollectorRegistry(auto_describe=True)
 
-    for collector in list(filter(filter_metrics, prometheus_client.REGISTRY._collector_to_names.keys())):
+    for collector in filter(filter_metrics, prometheus_client.REGISTRY._collector_to_names):
         new_registry.register(collector)
 
     return prometheus_client.generate_latest(new_registry).decode("utf-8")
