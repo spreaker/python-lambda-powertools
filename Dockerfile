@@ -9,4 +9,4 @@ ADD tests ./tests
 
 ADD setup.py ./
 
-RUN python setup.py build
+RUN pip install . --no-cache-dir
