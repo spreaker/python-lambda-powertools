@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  test:
+    build:
+      context: .
+    command: python setup.py pytest --addopts "--junitxml=/tmp/junitresults.xml"
