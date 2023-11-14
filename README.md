@@ -4,10 +4,16 @@ Lambda Powertools is a package encapsulating utilities and best practices used t
 
 ## Local development
 
-To develop locally the library build the container, pytest will run automatically:
+To develop the library locally, build the dev container and run it:
 
 ```bash
-docker compose up --build
+docker compose build && docker compose run dev sh
+```
+
+To run the tests:
+
+```bash
+python setup.py pytest
 ```
 
 ## Releasing
@@ -17,22 +23,30 @@ To install the package locally, for inter-project usage, set the proper version 
 ```bash
 python setup.py bdist_wheel
 
-pip install ./dist/lambda_powertools-0.1.0-py3-none-any.whl --force-reinstall
+pip install ./dist/lambda_powertools-0.2.0-py3-none-any.whl --force-reinstall
 ```
 
 ## Components
 
 ### PowerHandler
 
-PowerHandler wraps a traditional Lambda handler and makes it smarter automatically setting up the logger with capturing of environment variables.
+PowerHandler wraps a traditional Lambda handler and makes it smarter.
+
+- Automatic intercept prometheus metrics generated during the lambda execution and serialize them into the logs so they can be ingested at a later stage. At the beginning of each execution the content of the Prometheus global registry is reset to avoid values from previous executions ending up summing with the newly generated ones.
 
 Example:
 
 ```py
 from lambda_powertools.runtime import power_handler
+from prometheus_client import Counter
+
+counter = Counter(
+  name="lambda_invocations_total",
+  documentation="Total number of lambda invocations"
+)
 
 def lambda_body(event, context):
-  pass
+  counter.inc(1)
 
 def lambda_handler(event, context):
   return power_handler(lambda_body)(event, context)
