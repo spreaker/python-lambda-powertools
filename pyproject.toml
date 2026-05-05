@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lambda_powertools"
-version = "0.2.2"
+version = "0.3.0"
 description = "Lambda Powertools is a package encapsulating utilities and best practices used to write Python Lambda functions at Spreaker."
 authors = [{ name = "Spreaker" }]
 license = { text = "MIT" }
@@ -14,7 +14,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest==8.3.5",
-    "pytest-mock==3.14.0",
+    "pytest-mock==3.15.1",
 ]
 
 [tool.setuptools.packages.find]
