@@ -1,12 +1,12 @@
-FROM python:3.10.17-alpine3.20
+FROM python:3.14-alpine
 
 RUN  mkdir -p /workspace/python-lambda-powertools
 
 WORKDIR /workspace/python-lambda-powertools
 
-ADD lambda_powertools ./lambda_powertools
-ADD tests ./tests
+COPY lambda_powertools ./lambda_powertools
+COPY tests ./tests
 
-ADD setup.py ./
+COPY pyproject.toml ./
 
-RUN pip install . --no-cache-dir
+RUN pip install ".[dev]" --no-cache-dir
