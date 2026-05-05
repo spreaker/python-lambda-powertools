@@ -13,17 +13,15 @@ docker compose build && docker compose run dev sh
 To run the tests:
 
 ```bash
-python setup.py pytest
+pytest
 ```
 
 ## Releasing
 
-To install the package locally, for inter-project usage, set the proper version in the file path and run:
+To install the package locally, for inter-project usage, run:
 
 ```bash
-python setup.py bdist_wheel
-
-pip install ./dist/lambda_powertools-0.2.0-py3-none-any.whl --force-reinstall
+pip install . --force-reinstall
 ```
 
 ## Components
